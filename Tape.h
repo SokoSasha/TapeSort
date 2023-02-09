@@ -12,37 +12,37 @@ union Int {
 	char bytes[4];
 };
 
-std::size_t translateToTape(std::string input, std::string output);	//Перевод с "человеческого" на "ленточный"
-void translateFromTape(std::string input, std::string output);		//Перевод с "ленточного" на "человеческий"
+std::size_t translateToTape(std::string input, std::string output);	//РџРµСЂРµРІРѕРґ СЃ "С‡РµР»РѕРІРµС‡РµСЃРєРѕРіРѕ" РЅР° "Р»РµРЅС‚РѕС‡РЅС‹Р№"
+void translateFromTape(std::string input, std::string output);		//РџРµСЂРµРІРѕРґ СЃ "Р»РµРЅС‚РѕС‡РЅРѕРіРѕ" РЅР° "С‡РµР»РѕРІРµС‡РµСЃРєРёР№"
 
 template <typename T>
-// Интерфейс ленты
+// РРЅС‚РµСЂС„РµР№СЃ Р»РµРЅС‚С‹
 class ITape {
 public:	
-	virtual std::size_t getLen() = 0;		//Возвращает заданную длину ленты
+	virtual std::size_t getLen() = 0;		//Р’РѕР·РІСЂР°С‰Р°РµС‚ Р·Р°РґР°РЅРЅСѓСЋ РґР»РёРЅСѓ Р»РµРЅС‚С‹
 	virtual ~ITape() {}
 
-	virtual void readTape(T& to) = 0;		//Чтение из текущей ячейки
-	virtual void Left() = 0;				//Один шаг влево. Если шаг можно сделать - возвращает 1, если нет - 0
-	virtual void Right() = 0;				//Один шаг вправо. Возвращаемые значения аналогичны moveRight
-	virtual void writeTape(T& fr) = 0;	//Запись в текущую ячейку
+	virtual void readTape(T& to) = 0;		//Р§С‚РµРЅРёРµ РёР· С‚РµРєСѓС‰РµР№ СЏС‡РµР№РєРё
+	virtual void Left() = 0;				//РћРґРёРЅ С€Р°Рі РІР»РµРІРѕ. Р•СЃР»Рё С€Р°Рі РјРѕР¶РЅРѕ СЃРґРµР»Р°С‚СЊ - РІРѕР·РІСЂР°С‰Р°РµС‚ 1, РµСЃР»Рё РЅРµС‚ - 0
+	virtual void Right() = 0;				//РћРґРёРЅ С€Р°Рі РІРїСЂР°РІРѕ. Р’РѕР·РІСЂР°С‰Р°РµРјС‹Рµ Р·РЅР°С‡РµРЅРёСЏ Р°РЅР°Р»РѕРіРёС‡РЅС‹ moveRight
+	virtual void writeTape(T& fr) = 0;	//Р—Р°РїРёСЃСЊ РІ С‚РµРєСѓС‰СѓСЋ СЏС‡РµР№РєСѓ
 	virtual void copyTape(T& to) = 0;
 	virtual void eraseFile() = 0;
 	virtual bool isGreater(T& to) = 0;
 
 protected:
-	char border;					//Флаг, на случай если нужно записать что-то по краям ленты
+	char border;					//Р¤Р»Р°Рі, РЅР° СЃР»СѓС‡Р°Р№ РµСЃР»Рё РЅСѓР¶РЅРѕ Р·Р°РїРёСЃР°С‚СЊ С‡С‚Рѕ-С‚Рѕ РїРѕ РєСЂР°СЏРј Р»РµРЅС‚С‹
 	std::string file_name;
-	static int moveDelay, OIdelay;	//Задержка перемещения и чтения/записи (одна для всех лент)
-	static int memory;				//Объем оперативной памяти (в байтах)
-	std::size_t length,				//Длина ленты
-				used;				//Количество занятых ячеек		
-	std::fstream file;				//Файл ленты
+	static int moveDelay, OIdelay;	//Р—Р°РґРµСЂР¶РєР° РїРµСЂРµРјРµС‰РµРЅРёСЏ Рё С‡С‚РµРЅРёСЏ/Р·Р°РїРёСЃРё (РѕРґРЅР° РґР»СЏ РІСЃРµС… Р»РµРЅС‚)
+	static int memory;				//РћР±СЉРµРј РѕРїРµСЂР°С‚РёРІРЅРѕР№ РїР°РјСЏС‚Рё (РІ Р±Р°Р№С‚Р°С…)
+	std::size_t length,				//Р”Р»РёРЅР° Р»РµРЅС‚С‹
+				used;				//РљРѕР»РёС‡РµСЃС‚РІРѕ Р·Р°РЅСЏС‚С‹С… СЏС‡РµРµРє		
+	std::fstream file;				//Р¤Р°Р№Р» Р»РµРЅС‚С‹
 
 	virtual void copyBytes(T& to, int count) = 0;
 };
 
-// Сама лента
+// РЎР°РјР° Р»РµРЅС‚Р°
 class Tape : public ITape<Tape> {
 public:
 	Tape(int len, const char filename[]);
