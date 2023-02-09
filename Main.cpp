@@ -81,6 +81,7 @@ void shakerSort(Tape& tape) {
     std::size_t end = tape.getLen() - 1;
 
     while (swapped) {
+		swapped = false;
         for (int i = 0; i < end; i++) {
 			if (!swapped)
 				tape.readTape(buf);
@@ -117,6 +118,12 @@ void shakerSort(Tape& tape) {
 
 int main(int argc, char** argv) {
 
+	if (argc != 3) {
+		std::cout << "Wrong command" << std::endl << "Use default setings" << std::endl;
+		argv[1] = (char*)"input.txt";
+		argv[2] = (char*)"output.txt";
+	}
+
 	std::fstream config;
 	config.open("config.txt", std::ios::in | std::ios::app);
 	int mDel = 0, oiDel = 0;
@@ -127,9 +134,6 @@ int main(int argc, char** argv) {
 
 	std::getline(config, params);
 	oiDel = stoi(params.substr(12));
-
-	argv[1] = (char*)"input.txt";
-	argv[2] = (char*)"output.txt";
 
 	std::string in = processInput(argv[1]);
 	std::string out = processOutput(argv[2]);
